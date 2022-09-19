@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/logbook', [LogBookController::class, 'render'])->name('logbook.render');
     Route::get('/logbook/form', [LogBookController::class, 'render_form'])->name('logbook.form');
     Route::post('/logbook/form', [LogBookController::class, 'store'])->name('logbook.form');
+    Route::get('/logbook/noreg', [LogBookController::class, 'render_noreg'])->name('logbook.noreg');
 });
 
 Route::get('/mbkm/noreg/{id}', [MahasiswaMBKMController::class, 'render_noreg'])->name('mbkm.noreg');

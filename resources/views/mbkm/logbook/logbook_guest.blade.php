@@ -6,7 +6,7 @@
 
     <x-slot name="script">
         <script>
-            let url = "{{  }}/{{ }}";
+            let url = "{{ url('/logbook/noreg') }}/{{ $mahasiswa_mbkm_id->id }}";
         </script>
     </x-slot>
 </x-guest-layout>

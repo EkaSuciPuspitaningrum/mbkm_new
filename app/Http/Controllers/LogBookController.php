@@ -12,16 +12,28 @@ use phpDocumentor\Reflection\Types\True_;
 
 class LogBookController extends Controller
 {
+    public function render()
+    {
+        $mhsw_mbkm_exist = false;
+        $mahasiswa_mbkm_id = LogBook::where('mahasiswa_mbkm_id', Auth::user()->id)->first();
 
-    public function render(){
-        return view("mbkm.logbook.logbook");
+        if ($mahasiswa_mbkm_id) {
+            $mhsw_mbkm_exist = true;
+        }
+
+        return view("mbkm.logbook.logbook", [
+            'mhsw_mbkm_exist' => $mhsw_mbkm_exist,
+            'mahasiswa_mbkm_id' => $mahasiswa_mbkm_id
+        ]);
     }
 
-    public function render_form(){
+    public function render_form()
+    {
         return view("mbkm.logbook.logbook-form");
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'tanggal_log' => 'required|date',
             'tempat' => 'required|string',
@@ -30,16 +42,18 @@ class LogBookController extends Controller
             'id' => 'sometimes|numeric'
         ]);
 
-        if($request->exists('id')){
+        if ($request->exists('id')) {
             $logbook = LogBook::find($request->get('id'));
-            if(!$this->checkIfUserHasAccessToLog(Auth::user(), $logbook)) return abort(403);
-        }else{
+            if (!$this->checkIfUserHasAccessToLog(Auth::user(), $logbook)) {
+                return abort(403);
+            }
+        } else {
             $logbook = new LogBook();
         }
 
         $mhsw_mbkm = Auth::user()->getMahasiswaMbkm()->first();
 
-        if(!$mhsw_mbkm){
+        if (!$mhsw_mbkm) {
             return redirect()->back()->with('error', 'Anda belum mendaftar program MBKM! Daftar MBKM dahulu sebelum memasukkan entri logbook');
         }
 
@@ -49,17 +63,31 @@ class LogBookController extends Controller
 
         $logbook->save();
 
-        return view("mbkm.logbook.logbook-form");
+        return redirect()->to('/logbook');
     }
 
-    public function checkIfUserHasAccessToLog(User $user, LogBook $logBook){
+    public function checkIfUserHasAccessToLog(User $user, LogBook $logBook)
+    {
         $mhsw_mbkm = $logBook->getMahasiswaMbkm()->first();
         $mhsw = $mhsw_mbkm->getMhsw()->first();
 
-        if($user === $mhsw){
+        if ($user === $mhsw) {
             return true;
-        }else{
+        } else {
             return false;
         }
+    }
+
+    public function render_noreg(string $mahasiswa_mbkm_id)
+    {
+        $from_noreg = true;
+        $mhsw_mbkm_exist = true;
+        $mhsw_mbkm = LogBook::where('mahasiswa_mbkm_id', $mahasiswa_mbkm_id)->first();
+
+        return view('mbkm.logbook.logbook_guest', [
+            'mhsw_mbkm_exist' => $mhsw_mbkm_exist,
+            'mhsw_mbkm' => $mhsw_mbkm,
+            'from_noreg' => $from_noreg
+        ]);
     }
 }

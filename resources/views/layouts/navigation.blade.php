@@ -16,11 +16,6 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     @if(\Illuminate\Support\Facades\Auth::user()->can('mhsw.mbkm'))
-                    <x-nav-link :href="route('mbkm.daftar')" :active="request()->routeIs('mbkm.daftar')">
-                        {{ __('Daftar Kegiatan MBKM') }}
-                    </x-nav-link>
-                    @endif
-                    @if(\Illuminate\Support\Facades\Auth::user()->can('mhsw.mbkm'))
                     <x-nav-link :href="route('logbook.render')" :active="request()->routeIs('logbook.render')">
                         {{ __('LogBook') }}
                     </x-nav-link>

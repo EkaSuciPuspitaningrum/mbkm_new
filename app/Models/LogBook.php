@@ -25,6 +25,22 @@ class LogBook extends Model
         'approved_by_pembimbing'
     ];
 
+    public function getTanggalLog(){
+        return $this->belongsTo(LogBook::class, 'tanggal_log');
+    }
+
+    public function getTempatLog(){
+        return $this->belongsTo(LogBook::class, 'tempat');
+    }
+
+    public function getUraianLog(){
+        return $this->belongsTo(LogBook::class, 'uraian');
+    }
+
+    public function getRencanaLog(){
+        return $this->belongsTo(LogBook::class, 'rencana_pencapaian');
+    }
+
     public function getMahasiswaMbkm(){
         return $this->belongsTo(MahasiswaMbkm::class, 'mahasiswa_mbkm_id');
     }

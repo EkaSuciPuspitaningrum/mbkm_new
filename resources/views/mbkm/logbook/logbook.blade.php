@@ -5,6 +5,9 @@
         </h2>
     </x-slot>
 
+    @if($mhsw_mbkm_exist)
+    @include('layouts.logbook_layout')
+    @else
     <section class="py-1 bg-blueGray-50">
         <div class="w-full lg:w-8/12 px-4 mx-auto mt-6">
             <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
@@ -26,6 +29,13 @@
     </section>
 
     <x-slot name="script">
+        @if($mhsw_mbkm_exist)
+        <script>
+            let url = "{{url('/mbkm/noreg/') . $mhsw_mbkm->id}}";
+        </script>
 
+        <script src="{{url('/js/qr.js')}}"></script>
+        <script src="{{url('/js/mbkm.js')}}"></script>
+        @endif
     </x-slot>
 </x-app-layout>
